@@ -1,0 +1,16 @@
+Keep or Delete includes a vendored browser build of @vladmandic/face-api and its
+face detection, landmark, and descriptor model files for offline use.
+
+Project: @vladmandic/face-api
+License: MIT
+License text: face-api-LICENSE.txt
+
+No network service is required by the face grouping feature. The model files are
+loaded from the installed application package.
+
+Keep or Delete also includes Inter Variable for its user interface typography.
+
+Project: Inter
+Copyright: The Inter Project Authors
+License: SIL Open Font License 1.1
+License text: node_modules/@fontsource-variable/inter/LICENSE

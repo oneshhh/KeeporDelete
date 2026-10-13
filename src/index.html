@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self' file: data: blob:; media-src 'self' file: blob:; connect-src 'self' file: kod:; style-src 'self'; script-src 'self';"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Keep or Delete</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="titlebar">
+      <div class="brand">
+        <img src="../assets/app-logo.png" alt="" class="brand-icon" />
+        <span class="brand-name">Keep or Delete</span>
+        <span class="crumb-separator">/</span>
+        <span id="folderCrumb" class="folder-crumb">Choose a folder</span>
+      </div>
+
+      <nav id="mainNav" class="main-nav hidden" aria-label="Main navigation">
+        <button class="nav-button" data-route="landing">Home</button>
+        <button class="nav-button active" data-route="triage">Triage</button>
+        <button id="peopleNavButton" class="nav-button hidden" data-route="people">People</button>
+        <button class="nav-button" data-route="review">
+          Trash <span id="navTrashCount" class="count-badge">0</span>
+        </button>
+      </nav>
+
+      <div class="window-buttons">
+        <button id="minimizeWindow" class="window-button" aria-label="Minimize">—</button>
+        <button id="maximizeWindow" class="window-button" aria-label="Maximize">□</button>
+        <button id="closeWindow" class="window-button close" aria-label="Close">×</button>
+      </div>
+    </header>
+
+    <main id="app">
+      <aside id="sessionSidebar" class="session-sidebar hidden" aria-label="Folder statistics">
+        <div class="sidebar-brand">
+          <img src="../assets/app-logo.png" alt="" />
+          <div>
+            <strong>Keep or Delete</strong>
+            <span>Current session</span>
+          </div>
+        </div>
+
+        <section class="sidebar-section folder-section">
+          <span class="sidebar-kicker">Selected folder</span>
+          <div class="sidebar-folder">
+            <span class="sidebar-folder-icon">▰</span>
+            <div>
+              <strong id="sidebarFolderName">Folder</strong>
+              <span id="sidebarFolderPath">Folder path</span>
+            </div>
+          </div>
+          <button id="sidebarChangeFolderButton" class="sidebar-change-button">Choose New Folder</button>
+        </section>
+
+        <section class="sidebar-section">
+          <span class="sidebar-kicker">Storage</span>
+          <div class="storage-card total-storage-card">
+            <span>Total Folder Storage</span>
+            <strong id="sidebarTotalStorage">0 MB</strong>
+            <small>supported media in this folder</small>
+          </div>
+          <div class="storage-card saved-storage-card">
+            <span>Storage Saved</span>
+            <strong id="sidebarSavedStorage">0 MB</strong>
+            <small>media marked Keep</small>
+          </div>
+          <div class="storage-card reclaimed-storage-card">
+            <span>Reclaimed Storage</span>
+            <strong id="sidebarReclaimedStorage">0 MB</strong>
+            <small>selected or moved to Recycle Bin</small>
+          </div>
+        </section>
+
+        <section class="sidebar-section media-summary-section">
+          <div class="sidebar-section-heading">
+            <span class="sidebar-kicker">Media details</span>
+            <strong id="sidebarTotalItems">0</strong>
+          </div>
+          <dl class="media-detail-list">
+            <div><dt>Photos</dt><dd id="sidebarPhotoCount">0</dd></div>
+            <div><dt>Videos</dt><dd id="sidebarVideoCount">0</dd></div>
+            <div><dt>Live Photos</dt><dd id="sidebarLiveCount">0</dd></div>
+            <div><dt>Reviewed</dt><dd id="sidebarReviewedCount">0 of 0</dd></div>
+          </dl>
+          <div class="sidebar-progress-track" aria-hidden="true">
+            <div id="sidebarReviewProgress" class="sidebar-progress-fill"></div>
+          </div>
+        </section>
+      </aside>
+
+      <section id="landingScreen" class="screen landing-screen active">
+        <div class="ambient ambient-green"></div>
+        <div class="ambient ambient-blue"></div>
+        <article class="landing-card">
+          <img src="../assets/app-logo.png" alt="Keep or Delete" class="hero-icon" />
+          <div class="status-pill"><span></span> Ready to sort</div>
+          <h1>Keep or Delete</h1>
+          <p class="lead">Choose a folder and quickly decide what stays.</p>
+
+          <button id="selectFolderButton" class="primary-action">
+            <span class="button-icon">▰</span>
+            <span>Select Folder</span>
+            <kbd>Enter</kbd>
+          </button>
+
+          <label class="check-row">
+            <input id="includeSubfolders" type="checkbox" />
+            <span class="fake-check">✓</span>
+            <span>Include nested subfolders</span>
+          </label>
+
+          <label class="face-option-card">
+            <input id="enableFaceGrouping" type="checkbox" />
+            <span class="face-option-check">✓</span>
+            <span class="face-option-copy">
+              <strong>Group photos by people</strong>
+              <small>Optional. Face matching runs only on this computer.</small>
+            </span>
+            <span class="face-option-badge">OFFLINE</span>
+          </label>
+
+          <div id="resumeCard" class="resume-card hidden">
+            <div>
+              <strong>Continue your last session</strong>
+              <span id="resumeFolder">Previous folder</span>
+            </div>
+            <button id="resumeButton" class="quiet-button">Resume</button>
+          </div>
+
+          <div class="safety-card">
+            <span class="shield">✓</span>
+            <div>
+              <strong>Safe and non-destructive</strong>
+              <p>Nothing is removed until you review and confirm it in Trash.</p>
+            </div>
+          </div>
+
+          <p class="privacy-note">Your media stays on this computer.</p>
+        </article>
+      </section>
+
+      <section id="loadingScreen" class="screen loading-screen">
+        <div class="loader"></div>
+        <h2>Looking for photos and videos…</h2>
+        <p id="loadingFolder" class="muted"></p>
+      </section>
+
+      <section id="triageScreen" class="screen triage-screen">
+        <div id="faceFilterBanner" class="face-filter-banner hidden">
+          <div>
+            <span class="eyebrow">PEOPLE FILTER</span>
+            <strong id="faceFilterLabel">Showing matching photos</strong>
+          </div>
+          <div>
+            <button id="changePeopleButton" class="quiet-button">Change People</button>
+            <button id="clearPeopleFilterButton" class="quiet-button">Show All Media</button>
+          </div>
+        </div>
+        <div class="triage-toolbar">
+          <div class="mode-switch" role="tablist" aria-label="Media type">
+            <button id="photoModeButton" class="mode-button active" data-mode="photo">
+              Photos <span id="photoModeCount">0</span>
+            </button>
+            <button id="videoModeButton" class="mode-button" data-mode="video">
+              Videos <span id="videoModeCount">0</span>
+            </button>
+          </div>
+
+          <div class="progress-block">
+            <div class="progress-text">
+              <span id="progressLabel">0 of 0 reviewed</span>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-track"><div id="progressBar" class="progress-fill"></div></div>
+          </div>
+
+          <div class="toolbar-actions">
+            <button id="undoButton" class="utility-button" disabled>↶ Undo <kbd>Ctrl Z</kbd></button>
+            <button id="openTrashButton" class="utility-button danger-soft">
+              Trash <span id="trashCount">0</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="emptyMode" class="empty-mode hidden">
+          <div class="empty-symbol">◇</div>
+          <h2 id="emptyModeTitle">No videos found</h2>
+          <p id="emptyModeText">Switch back to Photos to continue.</p>
+          <button id="emptyModeSwitch" class="quiet-button">View Photos</button>
+        </div>
+
+        <div id="mediaWorkspace" class="media-workspace">
+          <div class="media-backdrop"></div>
+          <div id="mediaFrame" class="media-frame photo-frame">
+            <div id="mediaLoading" class="media-loading hidden">
+              <div class="small-loader"></div>
+              <span>Preparing preview…</span>
+            </div>
+            <div id="mediaSurface" class="media-surface"></div>
+
+            <div class="media-topbar">
+              <div class="media-badges">
+                <span id="kindBadge" class="media-badge">PHOTO</span>
+                <span id="formatBadge" class="media-badge dim">JPG</span>
+              </div>
+              <button id="soundButton" class="circle-button hidden" aria-label="Mute video">🔊</button>
+            </div>
+
+            <div class="media-caption">
+              <div>
+                <strong id="mediaName">Media name</strong>
+                <span id="mediaDetails">0 MB</span>
+              </div>
+              <button id="livePlayButton" class="play-button hidden">▶ Play Live Photo</button>
+            </div>
+          </div>
+
+          <div id="reelHint" class="reel-hint hidden">Scroll to browse videos • Decide with K or D</div>
+
+          <div class="decision-row">
+            <button id="deleteButton" class="decision-button delete-action">
+              <span class="decision-icon">×</span>
+              <span>Delete</span>
+              <kbd>D or ←</kbd>
+            </button>
+            <button id="previousButton" class="previous-button" disabled>
+              <span>←</span>
+              <span>Previous</span>
+              <kbd>P</kbd>
+            </button>
+            <button id="keepButton" class="decision-button keep-action">
+              <kbd>K or →</kbd>
+              <span>Keep</span>
+              <span class="decision-icon">✓</span>
+            </button>
+          </div>
+
+          <p class="shortcut-help"><kbd>Space</kbd> Play or pause &nbsp;•&nbsp; <kbd>T</kbd> Review Trash</p>
+        </div>
+      </section>
+
+      <section id="peopleScreen" class="screen people-screen">
+        <div class="people-heading">
+          <div>
+            <span class="eyebrow">PRIVATE &amp; OFFLINE</span>
+            <h1>People</h1>
+            <p>Find photos by face, then sort only those matches with the same Keep or Delete flow.</p>
+          </div>
+          <div class="people-heading-actions">
+            <button id="manageFaceDataButton" class="quiet-button">Manage Face Data</button>
+            <button id="rescanFacesButton" class="primary-small">Rescan All</button>
+          </div>
+        </div>
+
+        <article id="faceScanCard" class="face-scan-card">
+          <div class="face-scan-icon">◎</div>
+          <div class="face-scan-main">
+            <div class="face-scan-copy">
+              <div>
+                <strong id="faceScanTitle">Preparing face grouping</strong>
+                <span id="faceScanDetail">Results stay on this computer.</span>
+              </div>
+              <span id="faceScanPercent">0%</span>
+            </div>
+            <div class="face-scan-track"><div id="faceScanBar" class="face-scan-fill"></div></div>
+          </div>
+          <div class="face-scan-actions">
+            <button id="pauseFaceScanButton" class="quiet-button hidden">Pause</button>
+            <button id="cancelFaceScanButton" class="quiet-button hidden">Stop</button>
+          </div>
+        </article>
+
+        <div class="people-layout">
+          <aside class="me-card">
+            <div class="me-card-heading">
+              <span class="me-avatar" id="meAvatar">ME</span>
+              <div>
+                <strong>Find yourself</strong>
+                <span>Optional</span>
+              </div>
+            </div>
+            <p>Add one to three clear reference photos. Choose images with one visible face and varied lighting.</p>
+            <label for="meNameInput">Your label</label>
+            <input id="meNameInput" class="text-input" type="text" maxlength="40" value="Me" />
+            <button id="addMePhotosButton" class="primary-small full-width">Add Reference Photos</button>
+            <small id="meReferenceStatus">No reference photos added</small>
+          </aside>
+
+          <div class="people-content">
+            <div class="people-toolbar">
+              <label class="people-search">
+                <span>⌕</span>
+                <input id="peopleSearchInput" type="search" placeholder="Search names or tags" />
+              </label>
+              <span id="peopleSummary">0 people found</span>
+            </div>
+            <div id="peopleEmpty" class="people-empty hidden">
+              <div>◎</div>
+              <h2 id="peopleEmptyTitle">No people to show yet</h2>
+              <p id="peopleEmptyText">Start the local scan. Clear, front-facing photos usually group best.</p>
+            </div>
+            <div id="peopleGrid" class="people-grid"></div>
+          </div>
+        </div>
+
+        <div id="peopleActionDock" class="people-action-dock hidden">
+          <div class="selected-people-copy">
+            <strong id="selectedPeopleLabel">1 person selected</strong>
+            <span id="peopleMatchSummary">0 matching photos</span>
+          </div>
+          <div class="match-mode" role="group" aria-label="How selected people should match">
+            <button id="matchAnyButton" class="match-mode-button active">Any selected person</button>
+            <button id="matchAllButton" class="match-mode-button">Everyone together</button>
+          </div>
+          <button id="mergePeopleButton" class="quiet-button merge-people-button hidden">Same Person</button>
+          <button id="trashMatchingButton" class="danger-soft quiet-button">Add Undecided to Trash</button>
+          <button id="sortMatchingButton" class="primary-small">Sort Matching Photos</button>
+        </div>
+      </section>
+
+      <section id="reviewScreen" class="screen review-screen">
+        <div class="review-heading">
+          <div>
+            <span class="eyebrow">FINAL CHECK</span>
+            <h1>Review Trash</h1>
+            <p>Restore mistakes, then move the remaining items to the Windows Recycle Bin.</p>
+          </div>
+          <div class="review-summary">
+            <strong id="reviewCount">0 items</strong>
+            <span id="reviewSize">0 MB selected</span>
+          </div>
+        </div>
+
+        <div class="review-toolbar">
+          <label class="check-row compact">
+            <input id="selectAllTrash" type="checkbox" checked />
+            <span class="fake-check">✓</span>
+            <span>Select all</span>
+          </label>
+          <div class="review-toolbar-actions">
+            <button id="backToTriageButton" class="quiet-button">← Back to sorting</button>
+            <button id="restoreSelectedButton" class="quiet-button">Restore selected</button>
+            <button id="deleteSelectedButton" class="danger-button">Move to Recycle Bin</button>
+          </div>
+        </div>
+
+        <div id="reviewEmpty" class="review-empty hidden">
+          <div class="empty-symbol">✓</div>
+          <h2>Trash is empty</h2>
+          <p>Nothing is waiting to be deleted.</p>
+          <button id="finishWithoutTrashButton" class="primary-small">Finish</button>
+        </div>
+
+        <div id="reviewGrid" class="review-grid"></div>
+      </section>
+
+      <section id="completionScreen" class="screen completion-screen">
+        <div class="ambient ambient-green"></div>
+        <article class="completion-card">
+          <div class="success-mark">✓</div>
+          <span class="status-pill"><span></span> Sorting complete</span>
+          <h1>All Finished</h1>
+          <p class="lead">Your choices are complete. Kept files were left untouched.</p>
+
+          <div class="folder-strip">
+            <span>▰</span>
+            <span id="completeFolder">Folder</span>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric-card">
+              <span>Kept</span>
+              <strong id="completeKept">0</strong>
+              <small>media items</small>
+            </div>
+            <div class="metric-card danger-metric">
+              <span>Recycled</span>
+              <strong id="completeDeleted">0</strong>
+              <small id="completeFreed">0 MB reclaimed</small>
+            </div>
+            <div class="metric-card">
+              <span>Live Photos</span>
+              <strong id="completeLive">0</strong>
+              <small>pairs handled together</small>
+            </div>
+          </div>
+
+          <div class="completion-actions">
+            <button id="anotherFolderButton" class="primary-small">Choose Another Folder</button>
+            <button id="doneButton" class="quiet-button">Done</button>
+          </div>
+
+          <div class="system-links">
+            <button id="showFolderButton">Open folder in File Explorer</button>
+            <span>•</span>
+            <button id="openRecycleBinButton">View Recycle Bin</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="statusbar">
+      <span id="statusText">Ready</span>
+      <span id="versionText">Version</span>
+    </footer>
+
+    <div id="confirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-card">
+        <div class="modal-icon">!</div>
+        <h2 id="confirmTitle">Move items to the Recycle Bin?</h2>
+        <p id="confirmText">You can recover them later from the Windows Recycle Bin.</p>
+        <div class="modal-stats">
+          <span id="confirmCount">0 items</span>
+          <span id="confirmSize">0 MB</span>
+        </div>
+        <div id="deleteProgressSection" class="delete-progress hidden" aria-live="polite">
+          <div class="delete-progress-copy">
+            <strong id="deleteProgressLabel">Moving 0 of 0</strong>
+            <span id="deleteProgressItem">Preparing…</span>
+          </div>
+          <div class="delete-progress-track">
+            <div id="deleteProgressBar" class="delete-progress-fill"></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button id="cancelDeleteButton" class="quiet-button">Cancel</button>
+          <button id="confirmDeleteButton" class="danger-button">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="editPersonModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="editPersonTitle">
+      <div class="modal-card compact-modal">
+        <div class="person-modal-avatar" id="editPersonAvatar">P</div>
+        <h2 id="editPersonTitle">Name this person</h2>
+        <label for="editPersonName">Name</label>
+        <input id="editPersonName" class="text-input" type="text" maxlength="40" />
+        <label for="editPersonTags">Tags</label>
+        <input id="editPersonTags" class="text-input" type="text" maxlength="160" placeholder="Family, Friend, Work" />
+        <p class="modal-help">Separate tags with commas. Names and tags stay with this folder on this computer.</p>
+        <button id="undoPersonMergeButton" class="quiet-button undo-merge-button hidden">Undo “Same Person” Correction</button>
+        <div class="modal-actions spread-actions">
+          <button id="hidePersonButton" class="quiet-button">Not a person</button>
+          <span></span>
+          <button id="cancelEditPersonButton" class="quiet-button">Cancel</button>
+          <button id="savePersonButton" class="primary-small">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mergePeopleModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="mergePeopleTitle">
+      <div class="modal-card compact-modal merge-people-modal-card">
+        <div id="mergePeoplePreview" class="merge-people-preview"></div>
+        <span class="eyebrow">TEACH THE APP</span>
+        <h2 id="mergePeopleTitle">Are these the same person?</h2>
+        <p id="mergePeopleDescription">Combine the selected groups when angle, lighting, or age caused one person to be split.</p>
+        <label for="mergePersonName">Name for the combined person</label>
+        <input id="mergePersonName" class="text-input" type="text" maxlength="40" />
+        <p class="merge-learning-note"><span>✓</span> This correction is remembered for future scans of this folder.</p>
+        <div class="modal-actions">
+          <button id="cancelMergePeopleButton" class="quiet-button">Cancel</button>
+          <button id="confirmMergePeopleButton" class="primary-small">Yes, Same Person</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="faceDataModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="faceDataTitle">
+      <div class="modal-card compact-modal">
+        <div class="modal-icon safe-icon">✓</div>
+        <h2 id="faceDataTitle">Face data for this folder</h2>
+        <p>Face templates and names are encrypted with Windows and stored only on this computer. Clearing them does not change or delete any photos.</p>
+        <div class="modal-actions">
+          <button id="closeFaceDataButton" class="quiet-button">Close</button>
+          <button id="restoreHiddenPeopleButton" class="quiet-button">Restore Hidden Groups</button>
+          <button id="clearFaceDataButton" class="danger-button">Clear Face Data</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden" role="status"></div>
+    <script src="faces.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

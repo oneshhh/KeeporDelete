@@ -1,0 +1,69 @@
+{
+  "name": "keep-or-delete",
+  "version": "2.1.2",
+  "description": "A private Windows photo and video triage app.",
+  "main": "main.js",
+  "author": "Keep or Delete",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "test:smoke": "node tests/electron-smoke.js",
+    "test:faces": "node tests/face-smoke.js",
+    "dist": "electron-builder --win nsis --x64"
+  },
+  "build": {
+    "appId": "com.keepordelete.desktop",
+    "productName": "Keep or Delete",
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**/*",
+      "node_modules/heic-convert/**/*"
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "assets/**/*",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "win": {
+      "icon": "assets/app-logo.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Keep-or-Delete-Setup-${version}.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "assets/app-logo.ico",
+      "uninstallerIcon": "assets/app-logo.ico",
+      "uninstallDisplayName": "Keep or Delete",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "runAfterFinish": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "playwright-core": "^1.64.0"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.2.8",
+    "ffmpeg-static": "^5.3.0",
+    "heic-convert": "^2.1.0"
+  }
+}
