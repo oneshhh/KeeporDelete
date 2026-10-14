@@ -1,6 +1,6 @@
 {
   "name": "keep-or-delete",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "A private Windows photo and video triage app.",
   "main": "main.js",
   "author": "Keep or Delete",

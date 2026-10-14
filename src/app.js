@@ -8,6 +8,7 @@ const elements = {
   landing: $('#landingScreen'),
   loading: $('#loadingScreen'),
   triage: $('#triageScreen'),
+  album: $('#albumScreen'),
   people: $('#peopleScreen'),
   review: $('#reviewScreen'),
   completion: $('#completionScreen'),
@@ -51,7 +52,10 @@ const state = {
   peopleMatchMode: 'any',
   activeFaceFilter: null,
   editingPersonId: null,
-  pendingMergePersonIds: []
+  pendingMergePersonIds: [],
+  albumSort: 'newest',
+  albumType: 'all',
+  albumObserver: null
 };
 
 function formatBytes(bytes) {
@@ -61,6 +65,15 @@ function formatBytes(bytes) {
   const value = bytes / 1024 ** index;
   const digits = index >= 3 ? 2 : index === 2 ? 1 : 0;
   return `${value.toFixed(digits)} ${units[index]}`;
+}
+
+function formatMediaDate(timestamp, includeTime = true) {
+  const date = new Date(Number(timestamp));
+  if (!Number.isFinite(date.getTime()) || Number(timestamp) <= 0) return 'Date unavailable';
+  return new Intl.DateTimeFormat(undefined, includeTime
+    ? { dateStyle: 'medium', timeStyle: 'short' }
+    : { dateStyle: 'medium' }
+  ).format(date);
 }
 
 function setStatus(message) {
@@ -81,11 +94,11 @@ function showScreen(name) {
   elements[name].classList.add('active');
   const inSession = Boolean(state.folder);
   elements.mainNav.classList.toggle('hidden', !inSession || name === 'completion');
-  const showSidebar = inSession && (name === 'triage' || name === 'people' || name === 'review');
+  const showSidebar = inSession && ['triage', 'album', 'people', 'review'].includes(name);
   elements.sessionSidebar.classList.toggle('hidden', !showSidebar);
   $$('.nav-button').forEach((button) => {
     const route = button.dataset.route;
-    button.classList.toggle('active', route === name || (route === 'triage' && name === 'triage'));
+    button.classList.toggle('active', route === name || (route === 'triage' && name === 'album'));
   });
 }
 
@@ -167,6 +180,127 @@ function updateCounts() {
   $('#previousButton').disabled = state.history.length === 0;
   $('#videoModeButton').disabled = Boolean(state.activeFaceFilter);
   updateSidebarStats();
+}
+
+function albumItems() {
+  let items = [...state.items];
+  if (state.albumType === 'photo') items = items.filter((item) => item.kind !== 'video');
+  if (state.albumType === 'video') items = items.filter((item) => item.kind === 'video');
+
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  if (state.albumSort === 'oldest') {
+    return items.sort((a, b) => a.timestamp - b.timestamp || byName(a, b));
+  }
+  if (state.albumSort === 'largest') {
+    return items.sort((a, b) => b.size - a.size || b.timestamp - a.timestamp || byName(a, b));
+  }
+  if (state.albumSort === 'smallest') {
+    return items.sort((a, b) => a.size - b.size || b.timestamp - a.timestamp || byName(a, b));
+  }
+  return items.sort((a, b) => b.timestamp - a.timestamp || byName(a, b));
+}
+
+async function addAlbumThumbnail(card, item, token) {
+  const thumb = card.querySelector('.album-thumb');
+  try {
+    const image = document.createElement('img');
+    image.alt = '';
+    image.src = await api.thumbnailUrl(item.path, item.kind);
+    if (token !== state.renderToken || !card.isConnected) return;
+    image.addEventListener('error', () => image.remove());
+    thumb.prepend(image);
+  } catch {}
+}
+
+function openAlbumItem(item) {
+  if (state.activeFaceFilter) {
+    state.activeFaceFilter = null;
+    $('#faceFilterBanner').classList.add('hidden');
+  }
+  state.mode = item.kind === 'video' ? 'video' : 'photo';
+  const items = modeItems();
+  const index = items.findIndex((candidate) => candidate.id === item.id);
+  state.cursors[state.mode] = Math.max(0, index);
+  showScreen('triage');
+  renderCurrentMedia();
+  setStatus(`Opened ${item.name} from Album`);
+}
+
+function renderAlbum() {
+  const items = albumItems();
+  const token = ++state.renderToken;
+  const grid = $('#albumGrid');
+  const totalBytes = items.reduce((sum, item) => sum + item.size, 0);
+
+  state.albumObserver?.disconnect();
+  state.albumObserver = null;
+  grid.replaceChildren();
+  $('#albumSortSelect').value = state.albumSort;
+  $('#albumTypeSelect').value = state.albumType;
+  $('#albumCount').textContent = state.albumType === 'all'
+    ? `${items.length} item${items.length === 1 ? '' : 's'}`
+    : `${items.length} of ${state.items.length} items`;
+  $('#albumSize').textContent = `${formatBytes(totalBytes)} shown`;
+  $('#albumEmpty').classList.toggle('hidden', items.length > 0);
+  grid.classList.toggle('hidden', items.length === 0);
+
+  const itemsById = new Map(items.map((item) => [item.id, item]));
+  if ('IntersectionObserver' in window) {
+    state.albumObserver = new IntersectionObserver((entries, observer) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        const card = entry.target.closest('.album-card');
+        const item = itemsById.get(card?.dataset.id);
+        if (card && item) addAlbumThumbnail(card, item, token);
+      }
+    }, { root: elements.album, rootMargin: '260px' });
+  }
+
+  for (const item of items) {
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'album-card';
+    card.dataset.id = item.id;
+    card.setAttribute('aria-label', `Open ${item.name} in sorting`);
+
+    const thumb = document.createElement('div');
+    thumb.className = 'album-thumb';
+    const placeholder = document.createElement('div');
+    placeholder.className = 'album-placeholder';
+    placeholder.textContent = item.kind === 'video' ? '▶' : '◇';
+    const kind = document.createElement('span');
+    kind.className = 'album-kind';
+    kind.textContent = item.kind === 'live' ? 'LIVE PHOTO' : item.kind.toUpperCase();
+    thumb.append(placeholder, kind);
+
+    const info = document.createElement('div');
+    info.className = 'album-card-info';
+    const name = document.createElement('strong');
+    name.textContent = item.name;
+    const date = document.createElement('span');
+    date.className = 'album-card-date';
+    date.textContent = formatMediaDate(item.timestamp, false);
+    const details = document.createElement('span');
+    details.className = 'album-card-details';
+    details.textContent = `${formatBytes(item.size)} • ${item.extension.replace('.', '').toUpperCase()}`;
+    info.append(name, date, details);
+    card.append(thumb, info);
+    card.addEventListener('click', () => openAlbumItem(item));
+    grid.append(card);
+
+    if (state.albumObserver) state.albumObserver.observe(thumb);
+    else addAlbumThumbnail(card, item, token);
+  }
+
+  updateSidebarStats();
+}
+
+function showAlbum() {
+  if (!state.folder) return;
+  showScreen('album');
+  renderAlbum();
+  setStatus(`${state.items.length} media items in this library`);
 }
 
 function sessionPayload() {
@@ -315,6 +449,7 @@ async function renderCurrentMedia() {
   $('#mediaWorkspace').classList.remove('hidden');
   $('#emptyMode').classList.add('hidden');
   $('#mediaName').textContent = item.name;
+  $('#mediaDate').textContent = formatMediaDate(item.timestamp);
   $('#mediaDetails').textContent = `${formatBytes(item.size)} • ${state.cursors[state.mode] + 1} of ${items.length}`;
   $('#kindBadge').textContent = item.kind === 'live' ? 'LIVE PHOTO' : item.kind.toUpperCase();
   $('#formatBadge').textContent = item.extension.replace('.', '').toUpperCase();
@@ -855,6 +990,10 @@ async function startFolder(folder, includeSubfolders, restoredSession = null, fa
     state.deletedStats = { itemCount: 0, fileCount: 0, bytes: 0 };
     state.selectedPeople = new Set();
     state.activeFaceFilter = null;
+    state.albumSort = 'newest';
+    state.albumType = 'all';
+    state.albumObserver?.disconnect();
+    state.albumObserver = null;
     state.faceService = null;
     state.faceSnapshot = null;
     state.faceEnabled = faceEnabled === null
@@ -1160,6 +1299,10 @@ function resetToLanding(clearSaved = false) {
   state.faceSnapshot = null;
   state.selectedPeople = new Set();
   state.activeFaceFilter = null;
+  state.albumSort = 'newest';
+  state.albumType = 'all';
+  state.albumObserver?.disconnect();
+  state.albumObserver = null;
   $('#peopleNavButton').classList.add('hidden');
   $('#faceFilterBanner').classList.add('hidden');
   $('#enableFaceGrouping').checked = false;
@@ -1267,6 +1410,19 @@ $('#resumeButton').addEventListener('click', () => {
 
 $('#photoModeButton').addEventListener('click', () => setMode('photo'));
 $('#videoModeButton').addEventListener('click', () => setMode('video'));
+$('#openAlbumButton').addEventListener('click', showAlbum);
+$('#backToTriageFromAlbum').addEventListener('click', () => {
+  showScreen('triage');
+  renderCurrentMedia();
+});
+$('#albumSortSelect').addEventListener('change', (event) => {
+  state.albumSort = event.target.value;
+  renderAlbum();
+});
+$('#albumTypeSelect').addEventListener('change', (event) => {
+  state.albumType = event.target.value;
+  renderAlbum();
+});
 $('#emptyModeSwitch').addEventListener('click', () => setMode(state.mode === 'photo' ? 'video' : 'photo'));
 $('#keepButton').addEventListener('click', () => choose('keep'));
 $('#deleteButton').addEventListener('click', () => choose('delete'));

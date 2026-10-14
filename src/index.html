@@ -162,12 +162,18 @@
           </div>
         </div>
         <div class="triage-toolbar">
-          <div class="mode-switch" role="tablist" aria-label="Media type">
-            <button id="photoModeButton" class="mode-button active" data-mode="photo">
-              Photos <span id="photoModeCount">0</span>
-            </button>
-            <button id="videoModeButton" class="mode-button" data-mode="video">
-              Videos <span id="videoModeCount">0</span>
+          <div class="triage-media-controls">
+            <div class="mode-switch" role="tablist" aria-label="Media type">
+              <button id="photoModeButton" class="mode-button active" data-mode="photo">
+                Photos <span id="photoModeCount">0</span>
+              </button>
+              <button id="videoModeButton" class="mode-button" data-mode="video">
+                Videos <span id="videoModeCount">0</span>
+              </button>
+            </div>
+            <button id="openAlbumButton" class="album-open-button" aria-label="Open album">
+              <span class="album-open-icon" aria-hidden="true">▦</span>
+              <span>Album</span>
             </button>
           </div>
 
@@ -214,6 +220,7 @@
             <div class="media-caption">
               <div>
                 <strong id="mediaName">Media name</strong>
+                <span id="mediaDate">Date unavailable</span>
                 <span id="mediaDetails">0 MB</span>
               </div>
               <button id="livePlayButton" class="play-button hidden">▶ Play Live Photo</button>
@@ -242,6 +249,51 @@
 
           <p class="shortcut-help"><kbd>Space</kbd> Play or pause &nbsp;•&nbsp; <kbd>T</kbd> Review Trash</p>
         </div>
+      </section>
+
+      <section id="albumScreen" class="screen album-screen">
+        <div class="album-heading">
+          <div>
+            <span class="eyebrow album-eyebrow">SELECTED LIBRARY</span>
+            <h1>Album</h1>
+            <p>Browse every photo and video in this folder.</p>
+          </div>
+          <div class="album-summary">
+            <strong id="albumCount">0 items</strong>
+            <span id="albumSize">0 MB</span>
+          </div>
+        </div>
+
+        <div class="album-toolbar">
+          <button id="backToTriageFromAlbum" class="quiet-button">← Back to sorting</button>
+          <div class="album-filters">
+            <label class="album-filter">
+              <span>Sort</span>
+              <select id="albumSortSelect">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="largest">Largest size</option>
+                <option value="smallest">Smallest size</option>
+              </select>
+            </label>
+            <label class="album-filter">
+              <span>Type</span>
+              <select id="albumTypeSelect">
+                <option value="all">All media</option>
+                <option value="photo">Photos only</option>
+                <option value="video">Videos only</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div id="albumEmpty" class="album-empty hidden">
+          <div class="empty-symbol">◇</div>
+          <h2>No matching media</h2>
+          <p>Choose another type filter to see the rest of this library.</p>
+        </div>
+
+        <div id="albumGrid" class="album-grid"></div>
       </section>
 
       <section id="peopleScreen" class="screen people-screen">

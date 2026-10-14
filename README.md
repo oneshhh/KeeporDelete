@@ -4,7 +4,7 @@ A private Windows desktop app for quickly sorting a folder of photos and videos.
 
 ## Use the app
 
-1. Run `dist/Keep-or-Delete-Setup-2.1.2.exe` once to open the guided installer.
+1. Run `dist/Keep-or-Delete-Setup-2.2.0.exe` once to open the guided installer.
 2. Keep the default `C:\Program Files\Keep or Delete` location or choose another folder on the destination page. Windows asks for administrator approval when installing in Program Files.
 3. Open **Keep or Delete** from the desktop or Start menu. The installed build starts much faster than the old self-extracting portable version.
 4. Choose a folder and optionally include nested subfolders.
@@ -21,6 +21,8 @@ Open **Windows Settings → Apps → Installed apps**, find **Keep or Delete**, 
 Use **Home** in the top navigation at any time to return to folder selection. The current folder remains available through **Resume** until a different folder is selected.
 
 The session sidebar shows the selected folder, total media size, storage marked to keep, reclaimable storage, photo/video/Live Photo totals, and review progress. Use **Choose New Folder** there to switch folders without losing access to the current session if the picker is cancelled.
+
+Use **Album** beside the Photos and Videos controls to browse the complete selected library in a thumbnail grid. The Album can be sorted by newest date, oldest date, largest size, or smallest size, and filtered to show all media, photos only, or videos only. Select a thumbnail to open that item in Keep/Delete sorting. The available media date is also shown under the filename while sorting.
 
 Confirmed items are moved to the Windows Recycle Bin. Kept files are never modified or moved.
 

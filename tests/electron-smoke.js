@@ -43,6 +43,26 @@ async function run() {
     assert.equal(await page.locator('#sidebarVideoCount').textContent(), '1');
     assert.equal(await page.locator('#sidebarLiveCount').textContent(), '1');
     assert.notEqual(await page.locator('#sidebarTotalStorage').textContent(), '0 MB');
+    assert.notEqual(await page.locator('#mediaDate').textContent(), 'Date unavailable');
+
+    await page.click('#openAlbumButton');
+    await page.waitForSelector('#albumScreen.active');
+    assert.equal(await page.locator('.album-card').count(), 3);
+    assert.equal(await page.locator('#albumSortSelect').inputValue(), 'newest');
+    await page.selectOption('#albumTypeSelect', 'photo');
+    assert.equal(await page.locator('.album-card').count(), 2);
+    await page.selectOption('#albumTypeSelect', 'video');
+    assert.equal(await page.locator('.album-card').count(), 1);
+    await page.selectOption('#albumTypeSelect', 'all');
+    await page.selectOption('#albumSortSelect', 'oldest');
+    assert.equal(await page.locator('.album-card-date').count(), 3);
+    await page.screenshot({ path: path.join(outputFolder, '02-album.png') });
+    await page.click('#backToTriageFromAlbum');
+    await page.waitForSelector('#triageScreen.active');
+    await page.click('#openAlbumButton');
+    await page.locator('.album-card').filter({ hasText: 'LIVE PHOTO' }).click();
+    await page.waitForSelector('#triageScreen.active');
+    assert.equal(await page.locator('#kindBadge').textContent(), 'LIVE PHOTO');
 
     await page.click('.nav-button[data-route="landing"]');
     await page.waitForSelector('#landingScreen.active');
@@ -101,7 +121,7 @@ async function run() {
     await page.screenshot({ path: path.join(outputFolder, '08-complete.png') });
 
     assert.deepEqual(pageErrors, []);
-    console.log('Smoke test passed: custom logo, folder statistics, Home, folder resume, Live Photo, Previous, video mode, review, restore, deletion progress, and completion.');
+    console.log('Smoke test passed: custom logo, folder statistics, Album filters, media dates, Home, folder resume, Live Photo, Previous, video mode, review, restore, deletion progress, and completion.');
   } finally {
     await app.close();
   }
