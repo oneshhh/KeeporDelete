@@ -1,7 +1,7 @@
 {
   "name": "keep-or-delete",
   "version": "2.2.1",
-  "description": "A private Windows photo and video triage app.",
+  "description": "A free, private, offline Windows photo and video organizer with fast Keep/Delete sorting and local face grouping.",
   "main": "main.js",
   "author": "Keep or Delete",
   "license": "MIT",

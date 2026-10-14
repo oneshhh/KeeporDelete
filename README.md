@@ -1,6 +1,27 @@
 # Keep or Delete
 
-A private Windows desktop app for quickly sorting a folder of photos and videos.
+**Keep or Delete is a free, privacy-first Windows photo and video organizer for quickly sorting large local media libraries, removing unwanted files, grouping photos by people, and reclaiming storage space. Everything runs locally on your computer—no cloud upload or internet connection is required.**
+
+## A faster way to clean up local photo libraries
+
+Keep or Delete is made for people who still believe in keeping their memories on local storage. It helps anyone who saves photos and videos on a laptop, maintains a personal backup, or needs a simple way to sort through a huge media library and keep only what matters.
+
+The need for this app became clear when I discovered that my photo backup from the previous three years had grown to **50 GB**. It was packed with unnecessary screenshots, memes, duplicates of things I no longer needed, and other clutter. Opening every file individually and deleting it through File Explorer was slow and frustrating, so I searched for an app that could make the process quicker. To my surprise, I could not find a single genuinely free app that did what I needed.
+
+That made the next project obvious. After two weeks of shaping the idea and refining the interface, Keep or Delete was ready. It provides a fast Keep/Delete workflow, a searchable Album view, optional offline face recognition and people grouping, video browsing, Apple Live Photo support, and a final Trash review before anything is removed.
+
+Whether you want to clean up an old photo backup, organize family pictures, find photos containing specific people, review videos, or free space on a Windows PC, Keep or Delete provides a private and straightforward way to do it—all without sending your personal media anywhere.
+
+## Highlights
+
+- Free and fully offline Windows photo organizer and video sorter.
+- Rapid Keep/Delete decisions using buttons or keyboard shortcuts.
+- Album browser with date, size, and photo/video filters.
+- Optional local face recognition for finding and grouping people.
+- Apple Live Photo and HEIC/HEIF support.
+- Reel-style video browsing.
+- Safe Trash review with restore and deletion progress.
+- No account, subscription, cloud storage, or media upload required.
 
 ## Use the app
 
