@@ -60,9 +60,22 @@ async function run() {
     await page.click('#backToTriageFromAlbum');
     await page.waitForSelector('#triageScreen.active');
     await page.click('#openAlbumButton');
+    const albumScrollTop = await page.locator('#albumScreen').evaluate((screen) => screen.scrollTop);
     await page.locator('.album-card').filter({ hasText: 'LIVE PHOTO' }).click();
     await page.waitForSelector('#triageScreen.active');
     assert.equal(await page.locator('#kindBadge').textContent(), 'LIVE PHOTO');
+    await page.waitForSelector('#backToAlbumButton:not(.hidden)');
+    assert.equal(await page.locator('#openAlbumButton').evaluate((button) => button.classList.contains('hidden')), true);
+    await page.screenshot({ path: path.join(outputFolder, '02-album-item-open.png') });
+    await page.click('#backToAlbumButton');
+    await page.waitForSelector('#albumScreen.active');
+    assert.equal(await page.locator('#albumScreen').evaluate((screen) => screen.scrollTop), albumScrollTop);
+    assert.equal(await page.locator('#albumSortSelect').inputValue(), 'oldest');
+    assert.equal(await page.locator('#albumTypeSelect').inputValue(), 'all');
+    assert.equal(await page.locator('.album-card.album-return-target').count(), 1);
+    await page.screenshot({ path: path.join(outputFolder, '02-album-return.png') });
+    await page.locator('.album-card').filter({ hasText: 'LIVE PHOTO' }).click();
+    await page.waitForSelector('#triageScreen.active');
 
     await page.click('.nav-button[data-route="landing"]');
     await page.waitForSelector('#landingScreen.active');
@@ -121,7 +134,7 @@ async function run() {
     await page.screenshot({ path: path.join(outputFolder, '08-complete.png') });
 
     assert.deepEqual(pageErrors, []);
-    console.log('Smoke test passed: custom logo, folder statistics, Album filters, media dates, Home, folder resume, Live Photo, Previous, video mode, review, restore, deletion progress, and completion.');
+    console.log('Smoke test passed: custom logo, folder statistics, Album filters and return position, media dates, Home, folder resume, Live Photo, Previous, video mode, review, restore, deletion progress, and completion.');
   } finally {
     await app.close();
   }

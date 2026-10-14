@@ -837,6 +837,17 @@ kbd {
   color: var(--text);
 }
 
+.album-back-button {
+  border-color: rgba(75, 226, 119, 0.34);
+  background: rgba(75, 226, 119, 0.09);
+  color: var(--text);
+}
+
+.album-back-button > span:first-child {
+  color: var(--green);
+  font-size: 16px;
+}
+
 .album-open-icon {
   color: var(--green);
   font-size: 18px;
@@ -1324,6 +1335,17 @@ kbd {
   border-color: rgba(75, 226, 119, 0.42);
   outline: none;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.album-card.album-return-target {
+  border-color: rgba(75, 226, 119, 0.82);
+  box-shadow: 0 0 0 3px rgba(75, 226, 119, 0.15), 0 10px 26px rgba(0, 0, 0, 0.22);
+  animation: albumReturnPulse 800ms ease-out;
+}
+
+@keyframes albumReturnPulse {
+  from { transform: translateY(-2px) scale(1.015); }
+  to { transform: translateY(0) scale(1); }
 }
 
 .album-thumb {

@@ -55,7 +55,8 @@ const state = {
   pendingMergePersonIds: [],
   albumSort: 'newest',
   albumType: 'all',
-  albumObserver: null
+  albumObserver: null,
+  albumReturn: null
 };
 
 function formatBytes(bytes) {
@@ -90,6 +91,7 @@ function showToast(message, error = false) {
 }
 
 function showScreen(name) {
+  if (state.albumReturn && !['triage', 'album'].includes(name)) clearAlbumReturn();
   elements.screens.forEach((screen) => screen.classList.remove('active'));
   elements[name].classList.add('active');
   const inSession = Boolean(state.folder);
@@ -212,6 +214,36 @@ async function addAlbumThumbnail(card, item, token) {
   } catch {}
 }
 
+function clearAlbumReturn() {
+  state.albumReturn = null;
+  $('#openAlbumButton').classList.remove('hidden');
+  $('#backToAlbumButton').classList.add('hidden');
+}
+
+function returnToAlbum() {
+  const destination = state.albumReturn;
+  if (!destination) {
+    showAlbum();
+    return;
+  }
+
+  showScreen('album');
+  clearAlbumReturn();
+  requestAnimationFrame(() => {
+    elements.album.scrollTop = destination.scrollTop;
+    const card = $(`.album-card[data-id="${destination.itemId}"]`);
+    if (!card) return;
+    card.classList.add('album-return-target');
+    card.setAttribute('aria-current', 'true');
+    card.focus({ preventScroll: true });
+    setTimeout(() => {
+      card.classList.remove('album-return-target');
+      card.removeAttribute('aria-current');
+    }, 1600);
+  });
+  setStatus(`${state.items.length} media items in this library`);
+}
+
 function openAlbumItem(item) {
   if (state.activeFaceFilter) {
     state.activeFaceFilter = null;
@@ -221,6 +253,12 @@ function openAlbumItem(item) {
   const items = modeItems();
   const index = items.findIndex((candidate) => candidate.id === item.id);
   state.cursors[state.mode] = Math.max(0, index);
+  state.albumReturn = {
+    itemId: item.id,
+    scrollTop: elements.album.scrollTop
+  };
+  $('#openAlbumButton').classList.add('hidden');
+  $('#backToAlbumButton').classList.remove('hidden');
   showScreen('triage');
   renderCurrentMedia();
   setStatus(`Opened ${item.name} from Album`);
@@ -298,6 +336,7 @@ function renderAlbum() {
 
 function showAlbum() {
   if (!state.folder) return;
+  clearAlbumReturn();
   showScreen('album');
   renderAlbum();
   setStatus(`${state.items.length} media items in this library`);
@@ -994,6 +1033,7 @@ async function startFolder(folder, includeSubfolders, restoredSession = null, fa
     state.albumType = 'all';
     state.albumObserver?.disconnect();
     state.albumObserver = null;
+    state.albumReturn = null;
     state.faceService = null;
     state.faceSnapshot = null;
     state.faceEnabled = faceEnabled === null
@@ -1303,6 +1343,8 @@ function resetToLanding(clearSaved = false) {
   state.albumType = 'all';
   state.albumObserver?.disconnect();
   state.albumObserver = null;
+  state.albumReturn = null;
+  clearAlbumReturn();
   $('#peopleNavButton').classList.add('hidden');
   $('#faceFilterBanner').classList.add('hidden');
   $('#enableFaceGrouping').checked = false;
@@ -1411,6 +1453,7 @@ $('#resumeButton').addEventListener('click', () => {
 $('#photoModeButton').addEventListener('click', () => setMode('photo'));
 $('#videoModeButton').addEventListener('click', () => setMode('video'));
 $('#openAlbumButton').addEventListener('click', showAlbum);
+$('#backToAlbumButton').addEventListener('click', returnToAlbum);
 $('#backToTriageFromAlbum').addEventListener('click', () => {
   showScreen('triage');
   renderCurrentMedia();
