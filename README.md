@@ -4,20 +4,25 @@
 
 ## Download
 
-[**Download Keep or Delete 2.4.0 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.4.0/Keep-or-Delete-Setup-2.4.0.exe)
+[**Download Keep or Delete 2.4.1 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.4.1/Keep-or-Delete-Setup-2.4.1.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `8EBF5948CFB30652D9402D512857ED8AF3BFABD02D45B95C26D9F795D010D819`
+**SHA-256:** `4D9F45062C7E37445DA0CD2921047B585411714B9173A382FAD2D1C4548D7DE4`
 
-## New in 2.4.0
+## New in 2.4.1
+
+- Fixes the missing Windows runtime prerequisite that could prevent the face engine from loading in 2.4.0. The installer now bundles Microsoft's signed Visual C++ runtime and checks installation results.
+- Install over the existing app. Completed 2.4.0 face scans do not need resetting.
+
+## Face recognition improvements in 2.4
 
 - New offline AuraFace recognition uses 512-number signatures and library-wide comparisons to reduce groups split by angle and lighting.
 - Same Person corrections remain stable when reopening or regrouping, with exact selected unique-photo counts.
 - Grouping retains up to 64 varied signatures per person and accepts up to 12 reference photos.
-- The recognition model is included for offline use; the installer is approximately 406 MB.
+- The recognition model is included for offline use; the installer is approximately 424 MB.
 - **Upgrading from 2.3.1 or earlier requires a one-time face rescan per folder and adding reference photos again.** The previous encrypted face index is backed up before migration. Original photos and videos are preserved.
 
 Recognition can still make mistakes or split difficult faces; accuracy varies with image quality.
@@ -45,7 +50,7 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.4.0.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.4.1.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
