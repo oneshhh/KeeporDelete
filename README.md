@@ -4,20 +4,23 @@
 
 ## Download
 
-[**Download Keep or Delete 2.4.2 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.4.2/Keep-or-Delete-Setup-2.4.2.exe)
+[**Download Keep or Delete 2.5.1 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.1/Keep-or-Delete-Setup-2.5.1.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `4F0048D4B71B4E7F8BEEF8B73178C111FB3405639A8C32E5DA42E8E6A7FEF673`
+**SHA-256:** `15FAE1E52B0A531FB1F09912137F89E5E3FE4BF2D176D9122AFE249DE736A91A`
 
-## New in 2.4.2
+## New in 2.5.1
 
-- Adds an offline portable face engine that automatically takes over if Windows cannot load the native engine. Both run the same AuraFace model and use compatible signatures.
-- Portable recognition runs in a background worker and scans more slowly. Native recognition remains the default where it works.
-- Includes the signed Microsoft Visual C++ runtime installer introduced in 2.4.1.
-- Close the app and install over the existing version. Confirm **2.4.2** appears at the bottom-right on the affected computer. Completed 2.4 face scans and corrections are retained; do not clear face data.
+- Better matching across angles and expressions compares small groups with the closest saved views of a person, with safeguards for competing people and different faces appearing together.
+- **Find more matches** searches existing scans for likely split groups. Review the faces, bulk-select results, deselect mistakes, and confirm **Same Person** with the exact unique-photo count.
+- **Deselect all** clears your People selection in one step.
+- Saved 2.4 and 2.5 scans are regrouped when you reopen the folder. No full rescan or reference-photo re-enrollment is needed for this update. Original media and confirmed corrections are preserved.
+- Includes the Windows runtime installer and offline portable fallback introduced in 2.4.1 and 2.4.2.
+
+On a local 514-photo test set, all seven user-confirmed missed-match pairs now join and the group count changes from 94 to 87. This is a limited validation; it does not establish accuracy for every face or library.
 
 ## Face recognition improvements in 2.4
 
@@ -52,7 +55,7 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.4.2.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.5.1.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
