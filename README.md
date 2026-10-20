@@ -4,20 +4,23 @@
 
 ## Download
 
-[**Download Keep or Delete 2.3.1 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.3.1/Keep-or-Delete-Setup-2.3.1.exe)
+[**Download Keep or Delete 2.4.0 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.4.0/Keep-or-Delete-Setup-2.4.0.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `031D8402251DBECDF1639BAEB99BC48BACDD456133654FF1168B04E9403839CA`
+**SHA-256:** `8EBF5948CFB30652D9402D512857ED8AF3BFABD02D45B95C26D9F795D010D819`
 
-## New in 2.3.1
+## New in 2.4.0
 
-- Duplicate Delete finds identical and similar-looking photos, lets you choose which copies to keep, and sends the rest to Trash review.
-- Same Person now combines only the selected faces and shows the exact unique-photo count before confirmation. It no longer pulls in extra photos from other groups.
-- People grouping keeps up to 64 varied signatures per person and accepts up to 12 reference photos.
-- **Manage Face Data → Rebuild People Groups** repairs older incorrect combinations using saved scans. It resets corrections and other people's names/tags while keeping your reference photos and original media.
+- New offline AuraFace recognition uses 512-number signatures and library-wide comparisons to reduce groups split by angle and lighting.
+- Same Person corrections remain stable when reopening or regrouping, with exact selected unique-photo counts.
+- Grouping retains up to 64 varied signatures per person and accepts up to 12 reference photos.
+- The recognition model is included for offline use; the installer is approximately 406 MB.
+- **Upgrading from 2.3.1 or earlier requires a one-time face rescan per folder and adding reference photos again.** The previous encrypted face index is backed up before migration. Original photos and videos are preserved.
+
+Recognition can still make mistakes or split difficult faces; accuracy varies with image quality.
 
 ## Why I built it
 
@@ -42,14 +45,14 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.3.1.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.4.0.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
 
 To uninstall, open **Windows Settings → Apps → Installed apps**, select **Keep or Delete**, and choose **Uninstall**.
 
-**Updating an existing installation:** Close the app, run the new installer, and keep the current installation location. Your photos and saved app data are preserved. To repair an already-inflated people group after updating, open **People → Manage Face Data → Rebuild People Groups**. Rebuilding resets people names/tags and Same Person corrections; your original photos and reference images are kept.
+**Updating an existing installation:** Close the app, run the new installer, and keep the current installation location. Your photos and saved app data are preserved. When upgrading from 2.3.1 or earlier, reopen each folder for a one-time face rescan and add your reference photos again. A backup of the previous encrypted face index is saved before migration. Clear Face Data removes both the active index and this backup.
 
 ## Privacy
 
