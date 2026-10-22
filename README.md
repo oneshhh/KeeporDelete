@@ -4,15 +4,31 @@
 
 ## Download
 
-[**Download Keep or Delete 2.5.2 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.2/Keep-or-Delete-Setup-2.5.2.exe)
+[**Download Keep or Delete 2.5.3 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.3/Keep-or-Delete-Setup-2.5.3.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `F66723C45FAA32B0F9687C05716B26745990DE667F49F163529F4495D34A29FA`
+**SHA-256:** `64DB2A91258EEEC558BF1434C736C2CE234ABEF0CBECC81383C214AFCFF8EA87`
 
-## New in 2.5.2
+## New in 2.5.3
+
+- **A cleaner People view:** one-photo groups are tucked away while remaining in Find More Matches and future grouping. Show them when needed or use Add to People to keep a group visible. Face identity calculations remain unchanged from 2.5.2.
+- **Smarter duplicate checks:** compare photos, paired Live Photos and videos. Checks wait for People scanning by default, or start immediately when requested. Saved encrypted signatures reuse unchanged files, and new files are checked automatically while the library is open.
+- **Scan progress:** progress bars, elapsed time and approximate time remaining for both People and duplicate scans.
+- **People in Album:** find one person's photos or photos containing several selected people together, including faces in one-photo groups.
+- **Album selection and copying:** selection mode, Ctrl-click, Shift ranges, Select all shown, Deselect, native Windows file Copy / Ctrl C, drag-out and Send to Trash. Paste copied files in Explorer with Ctrl V.
+- **More media filters:** Live Photos, GIFs, WebP and HEIC/HEIF, alongside photos and videos. Video playback displays duration.
+- **Clearer Trash actions:** Send unreviewed photos to Trash queues choices without switching away from People. Album and duplicate actions also keep the current page open. Final removal still requires confirmation in Trash.
+- **Navigation and windows:** Previous/Next browse without changing decisions; Undo reverses a decision. Album has its own navigation entry, smaller layouts wrap controls, and right-clicking Maximize offers Left half / Right half.
+- **Reliable resume:** each folder remembers its choices and current photo by ID, so adding files does not shift your saved place.
+
+Existing current-model 2.4.x / 2.5.x face scans are reused. Newly added files are scanned; these changes do not require a full face rescan or adding current-model references again.
+
+Similar-video suggestions compare duration and three sampled frames. Review the full clip and sound before removing a copy. Paired Live Photos keep their still and motion files linked. Nothing is removed automatically.
+
+## Previous improvements in 2.5.2
 
 - Corrects the average face-signature calculations used when adding photos and combining groups.
 - Checks ambiguous matches even when two candidates appear very close, while retaining same-photo and competing-person safeguards.
@@ -53,19 +69,19 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 ## Features
 
 - Fast Keep/Delete decisions with buttons or keyboard shortcuts.
-- Album browser with newest, oldest, file-size, photo, and video filters.
+- Album browser with people, media-type, date and file-size filters, multiple selection, file copying and drag-out.
 - Optional offline face recognition for finding and grouping people.
-- Duplicate-photo comparison with enlarged previews and one-click keep selection.
+- Duplicate photo, Live Photo and video comparison with enlarged previews and keep selection.
 - Apple Live Photo and HEIC/HEIF support.
 - Reel-style video browsing.
 - Folder storage, saved storage, and reclaimable-space statistics.
-- Previous and Undo controls for correcting decisions.
+- Previous/Next for browsing and Undo for correcting decisions, with per-folder resume.
 - Final Trash review before files move to the Windows Recycle Bin.
 - No account, subscription, cloud storage, or media upload required.
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.5.2.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.5.3.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
