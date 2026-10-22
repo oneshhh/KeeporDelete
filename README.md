@@ -4,15 +4,25 @@
 
 ## Download
 
-[**Download Keep or Delete 2.5.1 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.1/Keep-or-Delete-Setup-2.5.1.exe)
+[**Download Keep or Delete 2.5.2 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.2/Keep-or-Delete-Setup-2.5.2.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `15FAE1E52B0A531FB1F09912137F89E5E3FE4BF2D176D9122AFE249DE736A91A`
+**SHA-256:** `F66723C45FAA32B0F9687C05716B26745990DE667F49F163529F4495D34A29FA`
 
-## New in 2.5.1
+## New in 2.5.2
+
+- Corrects the average face-signature calculations used when adding photos and combining groups.
+- Checks ambiguous matches even when two candidates appear very close, while retaining same-photo and competing-person safeguards.
+- Preserves established pose coverage; an experimental ranking change that split confirmed matches is not enabled.
+- Prevents saved reference signatures from being mixed across incompatible model versions, including changes that still produce 512-number signatures, with encrypted migration backups.
+- Existing current-model scans are reused and regrouped. No full rescan or adding current-model reference photos again is required when updating from 2.4.x or 2.5.x.
+
+The packaged app passed native and portable face-engine checks and encrypted upgrade tests. Nine confirmed same-person pairs remain together and 44 confirmed different-person comparisons remain separate in the local regression. These limited examples do not establish whole-library accuracy or fewer splits in every album.
+
+## Previous improvements in 2.5.1
 
 - Better matching across angles and expressions compares small groups with the closest saved views of a person, with safeguards for competing people and different faces appearing together.
 - **Find more matches** searches existing scans for likely split groups. Review the faces, bulk-select results, deselect mistakes, and confirm **Same Person** with the exact unique-photo count.
@@ -55,7 +65,7 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.5.1.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.5.2.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
