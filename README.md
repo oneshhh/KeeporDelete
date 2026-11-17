@@ -4,23 +4,30 @@
 
 ## Download
 
-[**Download Keep or Delete 2.5.4 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.4/Keep-or-Delete-Setup-2.5.4.exe)
+[**Download Keep or Delete 2.5.5 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.5/Keep-or-Delete-Setup-2.5.5.exe)
 
 The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
 
 **Requirements:** Windows 10 or Windows 11, 64-bit.
 
-**SHA-256:** `1A8F656C1728E9324BE4C62AEA9FDC027732F34714AB0C1C5A99CBF6F8E862FE`
+**SHA-256:** `A567F04F74BFCAE64DCDADC66B7E71693D3F5D433B894CEA31C4D3219C85DFA6`
 
-## New in 2.5.4
+## New in 2.5.5
+
+- **Large-media cleanup:** Album → Large files finds photos over 10 MB and videos over 100 MB. Select a batch and choose Small, Medium or High Quality; verified smaller replacements keep their aspect ratio and metadata, while recoverable originals move to the Recycle Bin.
+- **One coordinated library scan:** People and duplicate analysis share one pass over new or changed photos. The shared decoder avoids reopening still images, while exact hashing is skipped for files that have no size-compatible duplicate candidate.
+- **Safer library maintenance:** rename the active folder without losing encrypted face groups, duplicate signatures, Trash choices, or resume position. New and changed files are reconciled incrementally.
+- **Consistent People visibility:** Album and People use the same saved visibility rules while one-photo fragments remain available to matching and review tools.
+
+Existing current-model face scans, references and confirmed corrections are reused. No full face rescan is required when updating from 2.4.x / 2.5.x.
+
+## Previous improvements in 2.5.4
 
 - **A dedicated Album viewer:** open photos to view them instead of entering triage. Left/Right arrows browse the current sort order and filters; Escape or Back to Album returns to the same grid position. Videos, animated images and paired Live Photos also play in the viewer.
 - **Safe browsing:** the viewer has no Keep/Delete actions, and its shortcuts cannot change decisions, triage position or saved progress. Undoing triage decisions is limited to triage.
 - **Drag selection:** draw a box from empty Album space to select several files, or from an unselected photo in Select mode. Holding near the top or bottom scrolls through more rows. Ctrl/Command toggles selection, Shift adds, and Escape cancels. Selected files can still be copied or dragged out together.
 - **Stable interactions:** background updates wait until viewing or selecting finishes before replacing the grid. Finishing a selection gesture does not accidentally open a photo.
 - **Centered navigation:** the top tabs stay centered at half and full width. Window controls use matching icons with a Restore state, and triage Previous/Next controls have equal sizes and matching arrows.
-
-Existing current-model face scans, references and confirmed corrections are reused. No full face rescan is required when updating from 2.4.x / 2.5.x.
 
 ## Previous improvements in 2.5.3
 
@@ -79,9 +86,9 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 ## Features
 
 - Fast Keep/Delete decisions with buttons or keyboard shortcuts.
-- Album browser and dedicated viewer with people, media-type, date and file-size filters, drag selection, file copying and drag-out.
+- Album browser and dedicated viewer with people, media-type, date and file-size filters, drag selection, file copying, drag-out and recoverable batch size reduction.
 - Optional offline face recognition for finding and grouping people.
-- Duplicate photo, Live Photo and video comparison with enlarged previews and keep selection.
+- One coordinated People/duplicate scan, with photo, Live Photo and video comparison, enlarged previews and keep selection.
 - Apple Live Photo and HEIC/HEIF support.
 - Reel-style video browsing.
 - Folder storage, saved storage, and reclaimable-space statistics.
@@ -91,7 +98,7 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
-1. Download `Keep-or-Delete-Setup-2.5.4.exe` from the latest release.
+1. Download `Keep-or-Delete-Setup-2.5.5.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
 4. Open **Keep or Delete** from the desktop or Start menu.
