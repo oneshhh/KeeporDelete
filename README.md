@@ -1,16 +1,18 @@
 # Keep or Delete
 
-**A free, privacy-first Windows photo and video organizer for quickly sorting large local media libraries, removing unwanted files, grouping photos by people, and reclaiming storage space. Everything runs locally on your computer.**
+**A free, privacy-first Windows and macOS photo and video organizer for quickly sorting large local media libraries, removing unwanted files, grouping photos by people, and reclaiming storage space. Everything runs locally on your computer.**
 
 ## Download
 
 [**Download Keep or Delete 2.5.5 for Windows**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.5/Keep-or-Delete-Setup-2.5.5.exe)
 
-The guided installer lets you choose where the application is installed and includes a standard Windows uninstaller.
+[**Download Keep or Delete 2.5.5 for Apple-silicon Mac**](https://github.com/oneshhh/KeeporDelete/releases/download/v2.5.5/Keep-or-Delete-2.5.5-arm64.dmg)
 
-**Requirements:** Windows 10 or Windows 11, 64-bit.
+**Requirements:** Windows 10/11 (64-bit), or an Apple-silicon Mac (M-series processor).
 
-**SHA-256:** `A567F04F74BFCAE64DCDADC66B7E71693D3F5D433B894CEA31C4D3219C85DFA6`
+**Windows SHA-256:** `A567F04F74BFCAE64DCDADC66B7E71693D3F5D433B894CEA31C4D3219C85DFA6`
+
+**macOS SHA-256:** `c0699d60b1bc3ba9bba3ce27ae363802cf1fc469d5feabfc847c5b31a4e4fe57`
 
 ## New in 2.5.5
 
@@ -98,6 +100,8 @@ Keep or Delete provides a fast Keep/Delete workflow, a browsable Album, optional
 
 ## Install
 
+### Windows
+
 1. Download `Keep-or-Delete-Setup-2.5.5.exe` from the latest release.
 2. Open the installer and approve the Windows installation prompt.
 3. Keep the default Program Files location or choose another folder.
@@ -107,9 +111,15 @@ To uninstall, open **Windows Settings → Apps → Installed apps**, select **Ke
 
 **Updating an existing installation:** Close the app, run the new installer, and keep the current installation location. Your photos and saved app data are preserved. When upgrading from 2.3.1 or earlier, reopen each folder for a one-time face rescan and add your reference photos again. A backup of the previous encrypted face index is saved before migration. Clear Face Data removes both the active index and this backup.
 
+### macOS (Apple silicon)
+
+1. Download and open `Keep-or-Delete-2.5.5-arm64.dmg`.
+2. Drag **Keep or Delete** into **Applications**.
+3. Because this build is not notarized, Control-click the app in Applications, choose **Open**, then confirm **Open** on the first launch.
+
 ## Privacy
 
-Photos, videos, face templates, names, and tags remain on your computer. Face grouping is optional and processed locally. Confirmed deletions are moved to the Windows Recycle Bin so they can still be recovered through Windows.
+Photos, videos, face templates, names, and tags remain on your computer. Face grouping is optional and processed locally. Confirmed deletions are moved to the Windows Recycle Bin or macOS Trash so they can still be recovered.
 
 ## License
 
